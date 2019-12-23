@@ -10,19 +10,22 @@ javascript:(
         const player_response = JSON.parse(ytplayer.config.args.player_response);
         const formats = player_response.streamingData.formats.concat(player_response.streamingData.adaptiveFormats);
         const parsed_formats = formats.map(f => ({
-            description: f.mimeType.split(";")[0] + (f.qualityLabel === undefined ? "" : " " + f.qualityLabel) +  " (" + humanFileSize(f.contentLength) + ")",
+            description: f.mimeType.split(";")[0] + (f.qualityLabel === undefined ? "" : " " + f.qualityLabel),
+            file_size: humanFileSize(f.contentLength),
             url: f.url
         }));
 
-        const prompt_text = parsed_formats.map((f, i) => i + ": " + f.description).join("\n");
-        const user_choice = parseInt(prompt(prompt_text));
+        /* Prepare HTML table for download formats */
+        const html_table_header = "<tr><th>Format</th><th>Size</th></tr>\n";
+        const html_table_rows = parsed_formats
+            .map(f => "<tr><td><a href=" + f.url + ">" + f.description + "</td><td>" + f.file_size + "</td></tr>")
+            .join("\n");
+        const html_table =
+            "<table style=\"font-size:large; margin-left:auto; margin-right:auto; margin-top:20px\" cellspacing=\"10\">" +
+            html_table_header +
+            html_table_rows +
+            "</table>";
 
-        if (!(user_choice >= 0 && user_choice < parsed_formats.length)) {
-            alert("Invalid selection.");
-            return;
-        }
-
-        const url = parsed_formats[user_choice].url;
-        window.location.href = url;
+        document.body.innerHTML = html_table;
     }
 )();
