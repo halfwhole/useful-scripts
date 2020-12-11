@@ -7,7 +7,7 @@ javascript:(
         };
 
         /* Parse possible download formats for description and URL */
-        const player_response = JSON.parse(ytplayer.config.args.player_response);
+        const player_response = ytplayer.config.args.raw_player_response;
         const formats = player_response.streamingData.formats.concat(player_response.streamingData.adaptiveFormats);
         const parsed_formats = formats.map(f => ({
             description: f.mimeType.split(';')[0] + (f.qualityLabel === undefined ? '' : ' ' + f.qualityLabel),
