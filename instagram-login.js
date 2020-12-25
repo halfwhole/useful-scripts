@@ -1,11 +1,8 @@
 javascript:(
     function() {
-        const divs = document.querySelectorAll("div");
-        const target = [...divs].filter(x => x.textContent === "Log in to continue")[0];
-        const toDelete = target.parentNode.parentNode.parentNode;
-        toDelete.remove();
-
-        const body = document.querySelector("body");
-        body.setAttribute("style", "overflow: auto;");
+        const presentation_divs = document.querySelectorAll('div[role=presentation]');
+        const target = presentation_divs[presentation_divs.length - 1];
+        target.remove();
+        document.querySelector('body').setAttribute('style', 'overflow: auto');
     }
 )();
